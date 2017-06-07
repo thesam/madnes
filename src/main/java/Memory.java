@@ -10,4 +10,8 @@ public class Memory {
 	public int get(int index) {
 		return bytes[index];
 	}
+
+	public void set(int addr, int value) {
+		this.bytes[addr] = value;
+	}
 }

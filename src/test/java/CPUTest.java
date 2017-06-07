@@ -7,16 +7,6 @@ public class CPUTest {
 	private CPU cpu;
 
 	@Test
-	public void lda_immediate() {
-		init(0xA9, 0xFF);
-		cpu.tick();
-		a(0xFF);
-		n(true);
-		z(false);
-		pc(2);
-	}
-
-	@Test
 	public void ldx_immediate() {
 		init(0xA2, 0xFF);
 		cpu.tick();
@@ -27,10 +17,55 @@ public class CPUTest {
 	}
 
 	@Test
+	public void lda_immediate() {
+		init(0xA9, 0xFF);
+		cpu.tick();
+		a(0xFF);
+		n(true);
+		z(false);
+		pc(2);
+	}
+
+	@Test
 	public void jmp_absolute() {
 		init(0x4C, 0x34, 0x12);
 		cpu.tick();
 		pc(0x1234);
+	}
+
+	@Test
+	public void stx_zeropage() {
+		init(0x86,0x11);
+		cpu.setX(0x22);
+		cpu.tick();
+		mem(0x11,0x22);
+		pc(2);
+	}
+
+	@Test
+	public void inx() {
+		init(0xe8);
+		cpu.setX(-1);
+		cpu.tick();
+		x(0);
+		n(false);
+		z(true);
+		pc(1);
+	}
+
+	@Test
+	public void dex() {
+		init(0xca);
+		cpu.setX(0);
+		cpu.tick();
+		x(0xFF);
+		n(true);
+		z(false);
+		pc(1);
+	}
+
+	private void mem(int addr, int value) {
+		assertEquals(value, cpu.memory().get(addr));
 	}
 
 	private void pc(int i) {
