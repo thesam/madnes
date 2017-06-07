@@ -26,6 +26,13 @@ public class CPUTest {
 		pc(2);
 	}
 
+	@Test
+	public void jmp_absolute() {
+		init(0x4C, 0x34, 0x12);
+		cpu.tick();
+		pc(0x1234);
+	}
+
 	private void pc(int i) {
 		assertEquals(i, cpu.pc());
 	}

@@ -1,12 +1,12 @@
 public class CPU {
 	private final Memory memory;
 
-	private int a;  // Actually 8-bit
-    private int x;  // Actually 8-bit
-    private int y;  // Actually 8-bit
-    private int pc; // Actually 16-bit
-    private int s;  // Actually 8-bit
-    private int p;  // Actually 8-bit
+	private int a = 0;  // Actually 8-bit
+    private int x = 0;  // Actually 8-bit
+    private int y = 0;  // Actually 8-bit
+    private int pc = 0; // Actually 16-bit
+    private int s = 0;  // Actually 8-bit
+    private int p = 0;  // Actually 8-bit
 
 	//Status flags
 	private boolean n = false;
@@ -19,6 +19,9 @@ public class CPU {
 	public void tick() {
 		int next = memory.get(pc);
 		switch(next) {
+			case 0x4C:
+				jmp_abs();
+				break;
 			case 0xA2:
 				ldx_i();
 				break;
@@ -26,6 +29,13 @@ public class CPU {
 				lda_i();
 				break;
 		}
+	}
+
+	private void jmp_abs() {
+		int addr_hi = memory.get(pc + 2);
+		int addr_lo = memory.get(pc + 1);
+		int addr = (addr_hi << 8) | addr_lo;
+		pc = addr;
 	}
 
 	private void lda_i() {
