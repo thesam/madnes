@@ -34,6 +34,9 @@ public class CPU {
 			case 0xCA:
 				dex();
 				break;
+			case 0xEA:
+				nop();
+				break;
 			case 0xE8:
 				inx();
 				break;
@@ -41,6 +44,10 @@ public class CPU {
 				throw new RuntimeException("Unknown instruction: " + next);
 
 		}
+	}
+
+	private void nop() {
+		pc++;
 	}
 
 	private void inx() {

@@ -64,6 +64,13 @@ public class CPUTest {
 		pc(1);
 	}
 
+	@Test
+	public void nop() {
+		init(0xea);
+		cpu.tick();
+		pc(1);
+	}
+
 	private void mem(int addr, int value) {
 		assertEquals(value, cpu.memory().get(addr));
 	}
