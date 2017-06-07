@@ -19,13 +19,29 @@ public class CPU {
 	public void tick() {
 		int next = memory.get(pc);
 		switch(next) {
+			case 0xA2:
+				ldx_i();
+				break;
 			case 0xA9:
-				int value = memory.get(pc + 1);
-				a = value;
-				n(value);
-				z(value);
-				pc = pc + 2;
+				lda_i();
+				break;
 		}
+	}
+
+	private void lda_i() {
+		int value = memory.get(pc + 1);
+		a = value;
+		n(value);
+		z(value);
+		pc = pc + 2;
+	}
+
+	private void ldx_i() {
+		int value = memory.get(pc + 1);
+		x = value;
+		n(value);
+		z(value);
+		pc = pc + 2;
 	}
 
 	private void z(int value) {
@@ -33,7 +49,7 @@ public class CPU {
 	}
 
 	private void n(int value) {
-		z = (value & 0b10000000) > 0;
+		n = (value & 0b10000000) > 0;
 	}
 
 	public int a() {
@@ -46,5 +62,13 @@ public class CPU {
 
 	public boolean z() {
 		return z;
+	}
+
+	public int pc() {
+		return pc;
+	}
+
+	public int x() {
+		return x;
 	}
 }
