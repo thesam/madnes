@@ -28,8 +28,14 @@ public class CPU {
 			case 0xA2:
 				ldx_immediate();
 				break;
+			case 0xA5:
+				ldaZeroPage();
+				break;
 			case 0xA9:
 				lda_immediate();
+				break;
+			case 0xB5:
+				ldaZeroPageX();
 				break;
 			case 0xCA:
 				dex();
@@ -79,6 +85,25 @@ public class CPU {
 
 	private void lda_immediate() {
 		int value = memory.get(pc + 1);
+		a = value;
+		n(value);
+		z(value);
+		pc = pc + 2;
+	}
+
+	private void ldaZeroPage() {
+		int addr = memory.get(pc+1);
+		int value = memory.get(addr);
+		a = value;
+		n(value);
+		z(value);
+		pc = pc + 2;
+	}
+
+	private void ldaZeroPageX() {
+		int addr = memory.get(pc+1) + x;
+//		TODO: addr = addr & 0xFF;
+		int value = memory.get(addr);
 		a = value;
 		n(value);
 		z(value);

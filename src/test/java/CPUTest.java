@@ -27,6 +27,27 @@ public class CPUTest {
 	}
 
 	@Test
+	public void ldaZeroPage() {
+		init(0xA5, 0x02, 0XFF);
+		cpu.tick();
+		a(0xFF);
+		n(true);
+		z(false);
+		pc(2);
+	}
+
+	@Test
+	public void ldaZeroPageX() {
+		init(0xB5, 0x01, 0XFF);
+		cpu.setX(0x01);
+		cpu.tick();
+		a(0xFF);
+		n(true);
+		z(false);
+		pc(2);
+	}
+
+	@Test
 	public void jmp_absolute() {
 		init(0x4C, 0x34, 0x12);
 		cpu.tick();
@@ -35,10 +56,10 @@ public class CPUTest {
 
 	@Test
 	public void stx_zeropage() {
-		init(0x86,0x11);
+		init(0x86, 0x11);
 		cpu.setX(0x22);
 		cpu.tick();
-		mem(0x11,0x22);
+		mem(0x11, 0x22);
 		pc(2);
 	}
 
