@@ -34,8 +34,17 @@ public class CPU {
 			case 0xA9:
 				lda_immediate();
 				break;
+			case 0xAD:
+				ldaAbsolute();
+				break;
 			case 0xB5:
 				ldaZeroPageX();
+				break;
+			case 0xB9:
+				ldaAbsoluteY();
+				break;
+			case 0xBD:
+				ldaAbsoluteX();
 				break;
 			case 0xCA:
 				dex();
@@ -81,6 +90,41 @@ public class CPU {
 		int addr_lo = memory.get(pc + 1);
 		int addr = (addr_hi << 8) | addr_lo;
 		pc = addr;
+	}
+
+	private void ldaAbsolute() {
+		int lsb = memory.get(pc+1);
+		int msb = memory.get(pc+2);
+		int addr = (msb<<8) | lsb;
+		int value = memory.get(addr);
+		a = value;
+		n(value);
+		z(value);
+		pc = pc + 3;
+	}
+
+	private void ldaAbsoluteX() {
+		int lsb = memory.get(pc+1);
+		int msb = memory.get(pc+2);
+		int addr = (msb<<8) | lsb;
+		addr = addr + x;
+		int value = memory.get(addr);
+		a = value;
+		n(value);
+		z(value);
+		pc = pc + 3;
+	}
+
+	private void ldaAbsoluteY() {
+		int lsb = memory.get(pc+1);
+		int msb = memory.get(pc+2);
+		int addr = (msb<<8) | lsb;
+		addr = addr + y;
+		int value = memory.get(addr);
+		a = value;
+		n(value);
+		z(value);
+		pc = pc + 3;
 	}
 
 	private void lda_immediate() {
@@ -148,6 +192,10 @@ public class CPU {
 
 	public void setX(int x) {
 		this.x = x & 0xff;
+	}
+
+	public void setY(int y) {
+		this.y = y & 0xff;
 	}
 
 	public Memory memory() {

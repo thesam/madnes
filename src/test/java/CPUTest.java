@@ -38,13 +38,45 @@ public class CPUTest {
 
 	@Test
 	public void ldaZeroPageX() {
-		init(0xB5, 0x01, 0XFF);
+		init(0xB5, 0x01, 0xFF);
 		cpu.setX(0x01);
 		cpu.tick();
 		a(0xFF);
 		n(true);
 		z(false);
 		pc(2);
+	}
+
+	@Test
+	public void ldaAbsolute() {
+		init(0xAD, 0x03, 0x00, 0xFF);
+		cpu.tick();
+		a(0xFF);
+		n(true);
+		z(false);
+		pc(3);
+	}
+
+	@Test
+	public void ldaAbsoluteX() {
+		init(0xBD, 0x01, 0x00, 0xFF);
+		cpu.setX(0x02);
+		cpu.tick();
+		a(0xFF);
+		n(true);
+		z(false);
+		pc(3);
+	}
+
+	@Test
+	public void ldaAbsoluteY() {
+		init(0xB9, 0x01, 0x00, 0xFF);
+		cpu.setY(0x02);
+		cpu.tick();
+		a(0xFF);
+		n(true);
+		z(false);
+		pc(3);
 	}
 
 	@Test
