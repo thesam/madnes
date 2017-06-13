@@ -19,7 +19,6 @@ public class CPUTest {
     BRK
     BVC
     BVS
-    CLC
     CLD
     CLI
     CLV
@@ -49,7 +48,6 @@ public class CPUTest {
     RTI
     RTS
     SBC
-    SEC
     SED
     SEI
     STA
@@ -66,6 +64,22 @@ public class CPUTest {
 	private CPU cpu;
 
 	@Test
+    public void clc() {
+	    init(0x18);
+	    cpu.setC(true);
+	    cpu.tick();
+	    c(false);
+    }
+
+    @Test
+    public void sec() {
+        init(0x38);
+        cpu.setC(false);
+        cpu.tick();
+        c(true);
+    }
+
+    @Test
 	public void lda_immediate() {
 		init(0xA9, 0xFF);
 		cpu.tick();
@@ -250,6 +264,10 @@ public class CPUTest {
 	private void x(int i) {
 		assertEquals(i, cpu.x());
 	}
+
+    private void c(boolean b) {
+        assertEquals(b, cpu.c());
+    }
 
 	private void init(int... bytes) {
 		Memory memory = new Memory(bytes);

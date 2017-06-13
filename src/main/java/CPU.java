@@ -11,6 +11,7 @@ public class CPU {
 	//Status flags
 	private boolean n = false;
 	private boolean z = false;
+	private boolean c = false;
 
 	public CPU(Memory memory) {
 		this.memory = memory;
@@ -19,6 +20,12 @@ public class CPU {
 	public void tick() {
 		int next = memory.get(pc);
 		switch (next) {
+			case 0x18:
+				clc();
+				break;
+			case 0x38:
+				sec();
+				break;
 			case 0x4C:
 				jmp_abs();
 				break;
@@ -68,9 +75,17 @@ public class CPU {
 				inx();
 				break;
 			default:
-				throw new RuntimeException("Unknown instruction: " + next);
+				throw new RuntimeException(String.format("Unknown instruction: %x", next));
 
 		}
+	}
+
+	private void clc() {
+		c = false;
+	}
+
+	private void sec() {
+		c = true;
 	}
 
 	private void nop() {
@@ -253,5 +268,13 @@ public class CPU {
 
 	public Memory memory() {
 		return memory;
+	}
+
+	public void setC(boolean c) {
+		this.c = c;
+	}
+
+	public boolean c() {
+		return c;
 	}
 }
