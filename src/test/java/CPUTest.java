@@ -20,7 +20,6 @@ public class CPUTest {
     BVC
     BVS
     CLD
-    CLI
     CLV
     CMP
     CPX
@@ -69,15 +68,16 @@ public class CPUTest {
 	    cpu.setC(true);
 	    cpu.tick();
 	    c(false);
-    }
+   }
 
     @Test
-    public void sec() {
-        init(0x38);
-        cpu.setC(false);
+    public void cli() {
+        init(0x58);
+        cpu.setI(true);
         cpu.tick();
-        c(true);
+        i(false);
     }
+
 
     @Test
 	public void lda_immediate() {
@@ -239,6 +239,14 @@ public class CPUTest {
 		pc(1);
 	}
 
+    @Test
+    public void sec() {
+        init(0x38);
+        cpu.setC(false);
+        cpu.tick();
+        c(true);
+    }
+
 	private void mem(int addr, int value) {
 		assertEquals(value, cpu.memory().get(addr));
 	}
@@ -267,6 +275,10 @@ public class CPUTest {
 
     private void c(boolean b) {
         assertEquals(b, cpu.c());
+    }
+
+    private void i(boolean b) {
+        assertEquals(b, cpu.i());
     }
 
 	private void init(int... bytes) {

@@ -12,6 +12,7 @@ public class CPU {
 	private boolean n = false;
 	private boolean z = false;
 	private boolean c = false;
+	private boolean i = false;
 
 	public CPU(Memory memory) {
 		this.memory = memory;
@@ -28,6 +29,9 @@ public class CPU {
 				break;
 			case 0x4C:
 				jmp_abs();
+				break;
+			case 0x58:
+				cli();
 				break;
 			case 0x86:
 				stx_zeropage();
@@ -83,6 +87,11 @@ public class CPU {
 	private void clc() {
 		c = false;
 	}
+
+	private void cli() {
+		i = false;
+	}
+
 
 	private void sec() {
 		c = true;
@@ -276,5 +285,13 @@ public class CPU {
 
 	public boolean c() {
 		return c;
+	}
+
+	public void setI(boolean i) {
+		this.i = i;
+	}
+
+	public boolean i() {
+		return i;
 	}
 }
