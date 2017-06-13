@@ -5,6 +5,8 @@ import static org.junit.Assert.assertEquals;
 public class CPUTest {
 
     // Reference: http://www.6502.org/tutorials/6502opcodes.html
+    // https://en.wikibooks.org/wiki/6502_Assembly
+    // http://www.obelisk.me.uk/index.html
 	/* TODO:
 	ADC
 	AND
@@ -153,6 +155,30 @@ public class CPUTest {
 		z(false);
 		pc(3);
 	}
+
+    @Test
+    public void ldaIndirectX() {
+	    // X is added to the first address (in instruction)
+        init(0xA1, 0x01, 0x04,0x00, 0xFF);
+        cpu.setX(0x01);
+        cpu.tick();
+        a(0xFF);
+        n(true);
+        z(false);
+        pc(2);
+    }
+
+    @Test
+    public void ldaIndirectY() {
+	    // Y is added to the second address (from memory)
+        init(0xB1, 0x02, 0x01, 0x00, 0xFF);
+        cpu.setY(0x03);
+        cpu.tick();
+        a(0xFF);
+        n(true);
+        z(false);
+        pc(2);
+    }
 
     @Test
     public void ldxImmediate() {

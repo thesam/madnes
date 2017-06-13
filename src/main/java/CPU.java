@@ -41,6 +41,9 @@ public class CPU {
 			case 0x86:
 				stx_zeropage();
 				break;
+			case 0xA1:
+				ldaIndirectX();
+				break;
 			case 0xA2:
 				ldx_immediate();
 				break;
@@ -58,6 +61,9 @@ public class CPU {
 				break;
 			case 0xAE:
 				ldxAbsolute();
+				break;
+			case 0xB1:
+				ldaIndirectY();
 				break;
 			case 0xB5:
 				ldaZeroPageX();
@@ -213,6 +219,26 @@ public class CPU {
 		int addr = memory.get(pc+1) + x;
 //		TODO: addr = addr & 0xFF; (all zero page ops)
 		int value = memory.get(addr);
+		a = value;
+		n(value);
+		z(value);
+		pc = pc + 2;
+	}
+
+	private void ldaIndirectX() {
+		int addr = memory.get(pc+1) + x;
+		int value = memory.get(addr);
+
+		a = value;
+		n(value);
+		z(value);
+		pc = pc + 2;
+	}
+
+	private void ldaIndirectY() {
+		int addr = memory.get(pc+1) + x;
+		int value = memory.get(addr);
+
 		a = value;
 		n(value);
 		z(value);
