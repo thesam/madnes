@@ -9,10 +9,12 @@ public class CPU {
 	private int p = 0;  // Actually 8-bit
 
 	//Status flags
-	private boolean n = false;
-	private boolean z = false;
-	private boolean c = false;
-	private boolean i = false;
+	private boolean n = false; //negative/signed
+	private boolean z = false; //zero
+	private boolean c = false; //carry
+	private boolean i = false; //interrupt
+	private boolean d = false; //decimal
+	private boolean v = false; //overflow
 
 	public CPU(Memory memory) {
 		this.memory = memory;
@@ -32,6 +34,9 @@ public class CPU {
 				break;
 			case 0x58:
 				cli();
+				break;
+			case 0x78:
+				sei();
 				break;
 			case 0x86:
 				stx_zeropage();
@@ -60,6 +65,9 @@ public class CPU {
 			case 0xB6:
 				ldxZeroPageY();
 				break;
+			case 0xB8:
+				clv();
+				break;
 			case 0xB9:
 				ldaAbsoluteY();
 				break;
@@ -72,11 +80,17 @@ public class CPU {
 			case 0xCA:
 				dex();
 				break;
+			case 0xD8:
+				cld();
+				break;
 			case 0xEA:
 				nop();
 				break;
 			case 0xE8:
 				inx();
+				break;
+			case 0xF8:
+				sed();
 				break;
 			default:
 				throw new RuntimeException(String.format("Unknown instruction: %x", next));
@@ -88,13 +102,28 @@ public class CPU {
 		c = false;
 	}
 
+	private void cld() {
+		d = false;
+	}
+
 	private void cli() {
 		i = false;
 	}
 
+	private void clv() {
+		v = false;
+	}
 
 	private void sec() {
 		c = true;
+	}
+
+	private void sed() {
+		d = true;
+	}
+
+	private void sei() {
+		i = true;
 	}
 
 	private void nop() {
@@ -293,5 +322,21 @@ public class CPU {
 
 	public boolean i() {
 		return i;
+	}
+
+	public void setD(boolean d) {
+		this.d = d;
+	}
+
+	public boolean d() {
+		return d;
+	}
+
+	public void setV(boolean v) {
+		this.v = v;
+	}
+
+	public boolean v() {
+		return v;
 	}
 }

@@ -19,8 +19,6 @@ public class CPUTest {
     BRK
     BVC
     BVS
-    CLD
-    CLV
     CMP
     CPX
     CPY
@@ -47,7 +45,6 @@ public class CPUTest {
     RTI
     RTS
     SBC
-    SED
     SEI
     STA
     STX
@@ -78,6 +75,21 @@ public class CPUTest {
         i(false);
     }
 
+    @Test
+    public void cld() {
+        init(0xD8);
+        cpu.setD(true);
+        cpu.tick();
+        d(false);
+    }
+
+    @Test
+    public void clv() {
+        init(0xB8);
+        cpu.setV(true);
+        cpu.tick();
+        v(false);
+    }
 
     @Test
 	public void lda_immediate() {
@@ -247,6 +259,22 @@ public class CPUTest {
         c(true);
     }
 
+    @Test
+    public void sed() {
+        init(0xF8);
+        cpu.setD(false);
+        cpu.tick();
+        d(true);
+    }
+
+    @Test
+    public void sei() {
+        init(0x78);
+        cpu.setI(false);
+        cpu.tick();
+        i(true);
+    }
+
 	private void mem(int addr, int value) {
 		assertEquals(value, cpu.memory().get(addr));
 	}
@@ -281,7 +309,15 @@ public class CPUTest {
         assertEquals(b, cpu.i());
     }
 
-	private void init(int... bytes) {
+    private void d(boolean b) {
+        assertEquals(b,cpu.d());
+    }
+
+    private void v(boolean b) {
+        assertEquals(b,cpu.v());
+    }
+
+    private void init(int... bytes) {
 		Memory memory = new Memory(bytes);
 		cpu = new CPU(memory);
 	}
