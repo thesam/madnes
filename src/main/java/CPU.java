@@ -31,20 +31,32 @@ public class CPU {
 			case 0xA5:
 				ldaZeroPage();
 				break;
+			case 0xA6:
+				ldxZeroPage();
+				break;
 			case 0xA9:
 				lda_immediate();
 				break;
 			case 0xAD:
 				ldaAbsolute();
 				break;
+			case 0xAE:
+				ldxAbsolute();
+				break;
 			case 0xB5:
 				ldaZeroPageX();
+				break;
+			case 0xB6:
+				ldxZeroPageY();
 				break;
 			case 0xB9:
 				ldaAbsoluteY();
 				break;
 			case 0xBD:
 				ldaAbsoluteX();
+				break;
+			case 0xBE:
+				ldxAbsoluteY();
 				break;
 			case 0xCA:
 				dex();
@@ -146,7 +158,7 @@ public class CPU {
 
 	private void ldaZeroPageX() {
 		int addr = memory.get(pc+1) + x;
-//		TODO: addr = addr & 0xFF;
+//		TODO: addr = addr & 0xFF; (all zero page ops)
 		int value = memory.get(addr);
 		a = value;
 		n(value);
@@ -160,6 +172,47 @@ public class CPU {
 		n(value);
 		z(value);
 		pc = pc + 2;
+	}
+
+	private void ldxZeroPage() {
+		int addr = memory.get(pc+1);
+		int value = memory.get(addr);
+		x = value;
+		n(value);
+		z(value);
+		pc = pc + 2;
+	}
+
+	private void ldxZeroPageY() {
+		int addr = memory.get(pc+1) + x;
+		int value = memory.get(addr);
+		x = value;
+		n(value);
+		z(value);
+		pc = pc + 2;
+	}
+
+	private void ldxAbsolute() {
+		int lsb = memory.get(pc+1);
+		int msb = memory.get(pc+2);
+		int addr = (msb<<8) | lsb;
+		int value = memory.get(addr);
+		x = value;
+		n(value);
+		z(value);
+		pc = pc + 3;
+	}
+
+	private void ldxAbsoluteY() {
+		int lsb = memory.get(pc+1);
+		int msb = memory.get(pc+2);
+		int addr = (msb<<8) | lsb;
+		addr = addr + y;
+		int value = memory.get(addr);
+		x = value;
+		n(value);
+		z(value);
+		pc = pc + 3;
 	}
 
 	private void z(int value) {

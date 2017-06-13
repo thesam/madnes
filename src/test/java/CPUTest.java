@@ -4,17 +4,66 @@ import static org.junit.Assert.assertEquals;
 
 public class CPUTest {
 
-	private CPU cpu;
+    // Reference: http://www.6502.org/tutorials/6502opcodes.html
+	/* TODO:
+	ADC
+	AND
+	ASL
+	BCC
+    BCS
+    BEQ
+    BIT
+    BMI
+    BNE
+    BPL
+    BRK
+    BVC
+    BVS
+    CLC
+    CLD
+    CLI
+    CLV
+    CMP
+    CPX
+    CPY
+    DEC
+    DEX
+    DEY
+    EOR
+    INC
+    INX
+    INY
+    JMP
+    JSR
+    LDA
+    LDY
+    LSR
+    NOP
+    ORA
+    PHA
+    PHP
+    PLA
+    PLP
+    ROL
+    ROR
+    RTI
+    RTS
+    SBC
+    SEC
+    SED
+    SEI
+    STA
+    STX
+    STY
+    TAX
+    TAY
+    TSX
+    TXA
+    TXS
+    TYA
+	 */
 
-	@Test
-	public void ldx_immediate() {
-		init(0xA2, 0xFF);
-		cpu.tick();
-		x(0xFF);
-		n(true);
-		z(false);
-		pc(2);
-	}
+	private CPU cpu;
 
 	@Test
 	public void lda_immediate() {
@@ -79,7 +128,59 @@ public class CPUTest {
 		pc(3);
 	}
 
-	@Test
+    @Test
+    public void ldxImmediate() {
+        init(0xA2, 0xFF);
+        cpu.tick();
+        x(0xFF);
+        n(true);
+        z(false);
+        pc(2);
+    }
+
+    @Test
+    public void ldxZeroPage() {
+        init(0xA6, 0x02, 0XFF);
+        cpu.tick();
+        x(0xFF);
+        n(true);
+        z(false);
+        pc(2);
+    }
+
+    @Test
+    public void ldxZeroPageY() {
+        init(0xB6, 0x01, 0xFF);
+        cpu.setX(0x01);
+        cpu.tick();
+        x(0xFF);
+        n(true);
+        z(false);
+        pc(2);
+    }
+
+    @Test
+    public void ldxAbsolute() {
+        init(0xAE, 0x03, 0x00, 0xFF);
+        cpu.tick();
+        x(0xFF);
+        n(true);
+        z(false);
+        pc(3);
+    }
+
+    @Test
+    public void ldxAbsoluteY() {
+        init(0xBE, 0x01, 0x00, 0xFF);
+        cpu.setY(0x02);
+        cpu.tick();
+        x(0xFF);
+        n(true);
+        z(false);
+        pc(3);
+    }
+
+    @Test
 	public void jmp_absolute() {
 		init(0x4C, 0x34, 0x12);
 		cpu.tick();
